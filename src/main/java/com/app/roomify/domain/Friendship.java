@@ -1,9 +1,11 @@
 package com.app.roomify.domain;
 
+import com.app.roomify.domain.enums.RequestStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.engine.spi.Status;
 
 import java.time.LocalDateTime;
 
@@ -28,14 +30,10 @@ public class Friendship {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;  // Estado de la relación
+    private RequestStatus status;  // Estado de la relación
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now(); // Fecha de creación
 
-    public enum Status {
-        PENDING,
-        ACCEPTED,
-        BLOCKED
-    }
+
 }

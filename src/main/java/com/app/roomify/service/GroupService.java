@@ -9,10 +9,6 @@ import java.util.List;
 @Service
 public interface GroupService {
 
-    List<Media> getAllMedia();
-    Media getMediaById(int id);
-    Media saveMedia(Media media);
-    void deleteMedia(int id);
     List<Group> getAllGroups();
 
     Group getGroupById(int id);
