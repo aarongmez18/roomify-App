@@ -1,8 +1,8 @@
 package com.app.roomify.service.impl;
 
 import com.app.roomify.domain.Profile;
-import com.app.roomify.provider.RestProfileProvider;
 import com.app.roomify.provider.exchange.repository.ProfileRepository;
+import com.app.roomify.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProfileServiceImpl implements RestProfileProvider {
+public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
 
     @Override

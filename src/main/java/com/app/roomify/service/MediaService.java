@@ -1,9 +1,11 @@
 package com.app.roomify.service;
 
 import com.app.roomify.domain.Media;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface MediaService {
 
     List<Media> getAllMedia();

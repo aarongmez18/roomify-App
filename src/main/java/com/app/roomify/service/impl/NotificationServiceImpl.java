@@ -1,8 +1,8 @@
 package com.app.roomify.service.impl;
 
 import com.app.roomify.domain.Notification;
-import com.app.roomify.provider.RestNotificationProvider;
 import com.app.roomify.provider.exchange.repository.NotificationRepository;
+import com.app.roomify.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class NotificationServiceImpl implements RestNotificationProvider {
+public class NotificationServiceImpl implements NotificationService {
 
 
     private final NotificationRepository notificationRepository;

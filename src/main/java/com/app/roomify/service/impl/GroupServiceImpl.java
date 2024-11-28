@@ -1,8 +1,9 @@
 package com.app.roomify.service.impl;
 
 import com.app.roomify.domain.Group;
-import com.app.roomify.provider.RestGroupProvider;
+import com.app.roomify.domain.Media;
 import com.app.roomify.provider.exchange.repository.GroupRepository;
+import com.app.roomify.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +11,28 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GroupServiceImpl implements RestGroupProvider {
+public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
+
+    @Override
+    public List<Media> getAllMedia() {
+        return List.of();
+    }
+
+    @Override
+    public Media getMediaById(int id) {
+        return null;
+    }
+
+    @Override
+    public Media saveMedia(Media media) {
+        return null;
+    }
+
+    @Override
+    public void deleteMedia(int id) {
+        groupRepository.deleteById(id);
+    }
 
     @Override
     public List<Group> getAllGroups() {

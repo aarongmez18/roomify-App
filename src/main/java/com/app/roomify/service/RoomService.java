@@ -1,8 +1,10 @@
 package com.app.roomify.service;
 import com.app.roomify.domain.Room;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface RoomService {
 
     /**

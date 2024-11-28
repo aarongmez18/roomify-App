@@ -1,8 +1,8 @@
 package com.app.roomify.service.impl;
 
 import com.app.roomify.domain.Friendship;
-import com.app.roomify.provider.RestFriendshipProvider;
 import com.app.roomify.provider.exchange.repository.FriendshipRepository;
+import com.app.roomify.service.FriendshipService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class FriendshipServiceImpl implements RestFriendshipProvider {
+public class FriendshipServiceImpl implements FriendshipService {
 
     private final FriendshipRepository friendshipRepository;
 
