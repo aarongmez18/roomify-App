@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
 
+    public static final String ERROR_ROOM_NOT_FOUND = "Room not found with the given ID";
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
 
@@ -27,7 +28,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Room getRoomById(Integer id) {
         return roomRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Room not found with ID: " + id));
+                .orElseThrow(() -> new RuntimeException(ERROR_ROOM_NOT_FOUND));
     }
 
     // Crear una nueva sala
@@ -74,8 +75,8 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public boolean addUserToRoom(Integer roomId, Integer userId) {
         // Obtener la sala y el usuario
-        Room roomOpt = roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException("Room not found with ID: " + roomId));
-        User userOpt = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+        Room roomOpt = roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException(ERROR_ROOM_NOT_FOUND));
+        User userOpt = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found with ID"));
 
             // Verificar si la sala no ha alcanzado el número máximo de usuarios
             if (roomOpt.getUsers().size() < roomOpt.getMaxCapacity()) {
@@ -102,7 +103,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public boolean removeUserFromRoom(Integer roomId, Integer userId) {
         // Obtener la sala y el usuario
-        Room roomOpt = roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException("Room not found with ID: " + roomId));
+        Room roomOpt = roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException(ERROR_ROOM_NOT_FOUND));
         User userOpt = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
 
             // Verificar si el usuario está en la sala
