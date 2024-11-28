@@ -7,7 +7,7 @@ import java.util.List;
 public interface MessageService {
 
     List<Message> getAllMessages();
-    Message getMessageById(Long id);
+    Message getMessageById(int id);
     Message saveMessage(Message message);
-    void deleteMessage(Long id);
+    void deleteMessage(int id);
 }

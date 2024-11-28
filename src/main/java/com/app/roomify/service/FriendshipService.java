@@ -7,7 +7,7 @@ import java.util.List;
 public interface FriendshipService {
 
     List<Friendship> getAllFriendships();
-    Friendship getFriendshipById(Long id);
+    Friendship getFriendshipById(int id);
     Friendship saveFriendship(Friendship friendship);
-    void deleteFriendship(Long id);
+    void deleteFriendship(int id);
 }

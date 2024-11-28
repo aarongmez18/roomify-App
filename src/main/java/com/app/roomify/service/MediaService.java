@@ -7,7 +7,7 @@ import java.util.List;
 public interface MediaService {
 
     List<Media> getAllMedia();
-    Media getMediaById(Long id);
+    Media getMediaById(int id);
     Media saveMedia(Media media);
-    void deleteMedia(Long id);
+    void deleteMedia(int id);
 }

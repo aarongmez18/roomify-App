@@ -7,7 +7,7 @@ import java.util.List;
 public interface NotificationService {
 
     List<Notification> getAllNotifications();
-    Notification getNotificationById(Long id);
+    Notification getNotificationById(int id);
     Notification saveNotification(Notification notification);
-    void deleteNotification(Long id);
+    void deleteNotification(int id);
 }
