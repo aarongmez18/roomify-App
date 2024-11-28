@@ -1,5 +1,6 @@
 package com.app.roomify.provider.exchange.response;
 
+import com.app.roomify.domain.Room;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,7 @@ public class UserResponse {
     private UserStatusResponse status; // Estado del usuario
     private Set<UserResponse> followers = new HashSet<>(); // Usuarios que siguen a este usuario
     private Set<UserResponse> following = new HashSet<>(); // Usuarios que este usuario sigue
+    private Set<Room> rooms; // Salas en las que el usuario está presente
 
     public enum UserStatusResponse {
         ACTIVE,

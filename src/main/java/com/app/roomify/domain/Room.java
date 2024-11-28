@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "rooms")
@@ -52,4 +53,13 @@ public class Room {
     @ManyToOne
     @JoinColumn(name = "profile_photo_id", referencedColumnName = "id")
     private Media profilePhoto; // Foto de perfil de la sala
+
+    // Relación ManyToMany con User
+    @ManyToMany
+    @JoinTable(
+            name = "room_users",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> users; // Relación con los usuarios en la sala
 }

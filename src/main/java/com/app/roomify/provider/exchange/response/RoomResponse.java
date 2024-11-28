@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -27,4 +28,5 @@ public class RoomResponse {
     private boolean isPublic; // Define si la sala es pública o privada
     private Date expirationDate; // Fecha de expiración de la sala
     private MediaResponse profilePhoto; // Foto de perfil de la sala
+    private List<UserResponse> users; // Lista de usuarios en la sala
 }

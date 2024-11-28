@@ -9,8 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -57,6 +56,14 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "follower_id")
     )
     private Set<User> following = new HashSet<>(); // Usuarios que este usuario sigue
+
+    @ManyToMany
+    @JoinTable(
+            name = "room_users", // Tabla intermedia
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<Room> rooms; // Salas en las que el usuario está presente
 
     public enum UserStatus {
         ACTIVE,

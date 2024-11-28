@@ -24,7 +24,7 @@ public class UserController {
      * Obtener todos los usuarios.
      * @return Lista de todos los usuarios.
      */
-    @GetMapping("/users")
+    @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<User> users = userService.getAllUsers();
 
@@ -42,9 +42,10 @@ public class UserController {
      * @return El usuario con el ID especificado.
      */
     @GetMapping("/{id}")
-    public UserResponse getUserById(@PathVariable Long id) {
-        return userService.getUserById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
+    public ResponseEntity<UserResponse> getUserById(@PathVariable int id) {
+        User user = userService.getUserById(id);
+        UserResponse userResponse = conversionService.convert(user, UserResponse.class);
+        return ResponseEntity.ok(userResponse);
     }
 
     /**
@@ -55,7 +56,11 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse createUser(@RequestBody UserResponse userResponse) {
-        return userService.saveUser(userResponse);
+        // Convierte el UserResponse a User para el almacenamiento
+        User user = conversionService.convert(userResponse, User.class);
+        user = userService.saveUser(user);
+        // Convierte el User guardado nuevamente a UserResponse
+        return conversionService.convert(user, UserResponse.class);
     }
 
     /**
@@ -67,7 +72,13 @@ public class UserController {
     @PutMapping("/{id}")
     public UserResponse updateUser(@PathVariable int id, @RequestBody UserResponse userResponse) {
         userResponse.setId(id);
-        return userService.saveUser(userResponse);
+
+        // Convierte el UserResponse a User para la actualización
+        User user = conversionService.convert(userResponse, User.class);
+        user = userService.saveUser(user);
+
+        // Convierte el User actualizado nuevamente a UserResponse
+        return conversionService.convert(user, UserResponse.class);
     }
 
     /**
@@ -75,8 +86,9 @@ public class UserController {
      * @param id El ID del usuario a eliminar.
      */
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable int id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -86,7 +98,10 @@ public class UserController {
      */
     @GetMapping("/search")
     public List<UserResponse> searchUsersByName(@RequestParam String name) {
-        return userService.searchUsersByName(name);
+        List<User> users = userService.searchUsersByName(name);
+        return users.stream()
+                .map(user -> conversionService.convert(user, UserResponse.class))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -95,8 +110,9 @@ public class UserController {
      * @param followeeId El ID del usuario a seguir.
      */
     @PostMapping("/{followerId}/follow/{followeeId}")
-    public void followUser(@PathVariable int followerId, @PathVariable int followeeId) {
+    public ResponseEntity<Void> followUser(@PathVariable int followerId, @PathVariable int followeeId) {
         userService.followUser(followerId, followeeId);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -105,8 +121,9 @@ public class UserController {
      * @param followeeId El ID del usuario que es dejado de seguir.
      */
     @DeleteMapping("/{followerId}/unfollow/{followeeId}")
-    public void unfollowUser(@PathVariable int followerId, @PathVariable int followeeId) {
+    public ResponseEntity<Void> unfollowUser(@PathVariable int followerId, @PathVariable int followeeId) {
         userService.unfollowUser(followerId, followeeId);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -116,7 +133,10 @@ public class UserController {
      */
     @GetMapping("/{id}/followers")
     public List<UserResponse> getFollowers(@PathVariable int id) {
-        return userService.getFollowers(id);
+        List<User> followers = userService.getFollowers(id);
+        return followers.stream()
+                .map(user -> conversionService.convert(user, UserResponse.class))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -126,7 +146,10 @@ public class UserController {
      */
     @GetMapping("/{id}/following")
     public List<UserResponse> getFollowing(@PathVariable int id) {
-        return userService.getFollowing(id);
+        List<User> following = userService.getFollowing(id);
+        return following.stream()
+                .map(user -> conversionService.convert(user, UserResponse.class))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -134,8 +157,9 @@ public class UserController {
      * @param id El ID del usuario a activar.
      */
     @PostMapping("/{id}/activate")
-    public void activateUser(@PathVariable int id) {
+    public ResponseEntity<Void> activateUser(@PathVariable int id) {
         userService.activateUser(id);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -143,7 +167,8 @@ public class UserController {
      * @param id El ID del usuario a desactivar.
      */
     @PostMapping("/{id}/deactivate")
-    public void deactivateUser(@PathVariable int id) {
+    public ResponseEntity<Void> deactivateUser(@PathVariable int id) {
         userService.deactivateUser(id);
+        return ResponseEntity.ok().build();
     }
 }
