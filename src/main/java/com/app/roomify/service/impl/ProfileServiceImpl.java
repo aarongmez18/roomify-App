@@ -1,7 +1,7 @@
 package com.app.roomify.service.impl;
 
-import com.app.roomify.domain.Profile;
-import com.app.roomify.provider.exchange.repository.ProfileRepository;
+import com.app.roomify.repository.domain.Profile;
+import com.app.roomify.repository.ProfileRepository;
 import com.app.roomify.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

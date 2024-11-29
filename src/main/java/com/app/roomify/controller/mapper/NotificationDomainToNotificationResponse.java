@@ -1,7 +1,7 @@
 package com.app.roomify.controller.mapper;
 
-import com.app.roomify.domain.Notification;
-import com.app.roomify.provider.exchange.response.NotificationResponse;
+import com.app.roomify.repository.domain.Notification;
+import com.app.roomify.controller.response.NotificationResponse;
 import org.mapstruct.Mapper;
 import org.springframework.core.convert.converter.Converter;
 

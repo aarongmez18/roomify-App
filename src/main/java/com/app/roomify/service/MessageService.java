@@ -1,6 +1,6 @@
 package com.app.roomify.service;
 
-import com.app.roomify.domain.Message;
+import com.app.roomify.repository.domain.Message;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

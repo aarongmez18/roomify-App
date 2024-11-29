@@ -1,8 +1,8 @@
 package com.app.roomify.controller.mapper;
 
 
-import com.app.roomify.domain.Group;
-import com.app.roomify.provider.exchange.response.GroupResponse;
+import com.app.roomify.repository.domain.Group;
+import com.app.roomify.controller.response.GroupResponse;
 import org.mapstruct.Mapper;
 import org.springframework.core.convert.converter.Converter;
 

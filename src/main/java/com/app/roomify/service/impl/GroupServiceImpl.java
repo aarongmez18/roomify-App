@@ -1,8 +1,8 @@
 package com.app.roomify.service.impl;
 
-import com.app.roomify.domain.Group;
+import com.app.roomify.repository.domain.Group;
 
-import com.app.roomify.provider.exchange.repository.GroupRepository;
+import com.app.roomify.repository.GroupRepository;
 import com.app.roomify.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

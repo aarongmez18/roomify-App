@@ -1,7 +1,7 @@
 package com.app.roomify.service.impl;
 
-import com.app.roomify.domain.Message;
-import com.app.roomify.provider.exchange.repository.MessageRepository;
+import com.app.roomify.repository.domain.Message;
+import com.app.roomify.repository.MessageRepository;
 import com.app.roomify.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

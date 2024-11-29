@@ -1,0 +1,14 @@
+spring:
+    application:
+        name: roomify
+    datasource:
+        url: jdbc:mysql://localhost:3306/roomify
+        username: root
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        hibernate:
+            ddl-auto: update
+roomify:
+    jwt:
+        secret: springbooot

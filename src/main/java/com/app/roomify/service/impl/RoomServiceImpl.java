@@ -1,9 +1,11 @@
 package com.app.roomify.service.impl;
 
-import com.app.roomify.domain.Room;
-import com.app.roomify.domain.User;
-import com.app.roomify.provider.exchange.repository.RoomRepository;
-import com.app.roomify.provider.exchange.repository.UserRepository;
+import com.app.roomify.exception.AppErrors;
+import com.app.roomify.exception.RoomifyException;
+import com.app.roomify.repository.domain.Member;
+import com.app.roomify.repository.domain.Room;
+import com.app.roomify.repository.RoomRepository;
+import com.app.roomify.repository.MemberRepository;
 import com.app.roomify.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
 
-    public static final String ERROR_ROOM_NOT_FOUND = "Room not found with the given ID";
     private final RoomRepository roomRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     // Obtener todas las salas
     @Override
@@ -28,7 +29,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Room getRoomById(Integer id) {
         return roomRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(ERROR_ROOM_NOT_FOUND));
+                .orElseThrow(() -> new RoomifyException(AppErrors.ERROR_ROOM_NOT_FOUND));
     }
 
     // Crear una nueva sala
@@ -75,19 +76,19 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public boolean addUserToRoom(Integer roomId, Integer userId) {
         // Obtener la sala y el usuario
-        Room roomOpt = roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException(ERROR_ROOM_NOT_FOUND));
-        User userOpt = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found with ID"));
+        Room roomOpt = roomRepository.findById(roomId).orElseThrow(() -> new RoomifyException(AppErrors.ERROR_ROOM_NOT_FOUND));
+        Member memberOpt = memberRepository.findById(userId).orElseThrow(() -> new RoomifyException(AppErrors.ERROR_USER_NOT_FOUND));
 
             // Verificar si la sala no ha alcanzado el número máximo de usuarios
-            if (roomOpt.getUsers().size() < roomOpt.getMaxCapacity()) {
+            if (roomOpt.getMembers().size() < roomOpt.getMaxCapacity()) {
                 // Añadir el usuario a la sala
-                roomOpt.getUsers().add(userOpt);
+                roomOpt.getMembers().add(memberOpt);
                 // Añadir la sala al usuario (relación bidireccional)
-                userOpt.getRooms().add(roomOpt);
+                memberOpt.getRooms().add(roomOpt);
 
                 // Guardar los cambios en la base de datos
                 roomRepository.save(roomOpt);
-                userRepository.save(userOpt);
+                memberRepository.save(memberOpt);
 
                 return true; // Usuario añadido con éxito
             } else {
@@ -103,19 +104,19 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public boolean removeUserFromRoom(Integer roomId, Integer userId) {
         // Obtener la sala y el usuario
-        Room roomOpt = roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException(ERROR_ROOM_NOT_FOUND));
-        User userOpt = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+        Room roomOpt = roomRepository.findById(roomId).orElseThrow(() -> new RoomifyException(AppErrors.ERROR_ROOM_NOT_FOUND));
+        Member memberOpt = memberRepository.findById(userId).orElseThrow(() -> new RoomifyException(AppErrors.ERROR_USER_NOT_FOUND));
 
             // Verificar si el usuario está en la sala
-            if (roomOpt.getUsers().contains(userOpt)) {
+            if (roomOpt.getMembers().contains(memberOpt)) {
                 // Eliminar al usuario de la sala
-                roomOpt.getUsers().remove(userOpt);
+                roomOpt.getMembers().remove(memberOpt);
                 // Eliminar la sala del usuario
-                userOpt.getRooms().remove(roomOpt);
+                memberOpt.getRooms().remove(roomOpt);
 
                 // Guardar los cambios en la base de datos
                 roomRepository.save(roomOpt);
-                userRepository.save(userOpt);
+                memberRepository.save(memberOpt);
 
                 return true; // Usuario eliminado con éxito
             } else {

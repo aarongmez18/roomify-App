@@ -1,8 +1,8 @@
 package com.app.roomify.controller.mapper;
 
 
-import com.app.roomify.domain.Friendship;
-import com.app.roomify.provider.exchange.response.FriendshipResponse;
+import com.app.roomify.repository.domain.Friendship;
+import com.app.roomify.controller.response.FriendshipResponse;
 import org.mapstruct.Mapper;
 import org.springframework.core.convert.converter.Converter;
 

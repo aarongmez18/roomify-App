@@ -1,14 +1,16 @@
 package com.app.roomify.controller;
 
-import com.app.roomify.domain.Room;
-import com.app.roomify.provider.exchange.response.RoomResponse;
+import com.app.roomify.repository.domain.Room;
+import com.app.roomify.controller.response.RoomResponse;
 import com.app.roomify.service.RoomService;
+import com.app.roomify.exception.RoomifyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,14 +28,15 @@ public class RoomController {
      */
     @GetMapping
     public ResponseEntity<List<RoomResponse>> getAllRooms() {
-        List<Room> rooms = roomService.getAllRooms();
-
-        // Convertir cada Room a RoomResponse usando ConversionService
-        List<RoomResponse> roomResponses = rooms.stream()
-                .map(room -> conversionService.convert(room, RoomResponse.class))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(roomResponses);
+        try {
+            List<Room> rooms = roomService.getAllRooms();
+            List<RoomResponse> roomResponses = rooms.stream()
+                    .map(room -> conversionService.convert(room, RoomResponse.class))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(roomResponses);
+        } catch (RoomifyException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     /**
@@ -43,24 +46,30 @@ public class RoomController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<RoomResponse> getRoomById(@PathVariable int id) {
-        Room room = roomService.getRoomById(id);
-        RoomResponse roomResponse = conversionService.convert(room, RoomResponse.class);
-        return ResponseEntity.ok(roomResponse);
+        try {
+            Room room = roomService.getRoomById(id);
+            RoomResponse roomResponse = conversionService.convert(room, RoomResponse.class);
+            return ResponseEntity.ok(roomResponse);
+        } catch (RoomifyException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     /**
      * Crear una nueva sala.
-     * @param roomResponse La sala a guardar.
+     * @param room La sala a guardar.
      * @return La sala creada.
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RoomResponse createRoom(@RequestBody RoomResponse roomResponse) {
-        // Convierte el RoomResponse a Room para el almacenamiento
-        Room room = conversionService.convert(roomResponse, Room.class);
-        room = roomService.createRoom(room);
-        // Convierte el Room guardado nuevamente a RoomResponse
-        return conversionService.convert(room, RoomResponse.class);
+    public ResponseEntity<RoomResponse> createRoom(@Valid @RequestBody Room room) {
+        try {
+            RoomResponse roomResponse = conversionService.convert(room, RoomResponse.class);
+            roomService.createRoom(room);
+            return ResponseEntity.ok(roomResponse);
+        } catch (RoomifyException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     /**
@@ -70,15 +79,16 @@ public class RoomController {
      * @return La sala actualizada.
      */
     @PutMapping("/{id}")
-    public RoomResponse updateRoom(@PathVariable int id, @RequestBody RoomResponse roomResponse) {
-        roomResponse.setId(id);
-
-        // Convierte el RoomResponse a Room para la actualización
-        Room room = conversionService.convert(roomResponse, Room.class);
-        room = roomService.updateRoom(id, room);
-
-        // Convierte el Room actualizado nuevamente a RoomResponse
-        return conversionService.convert(room, RoomResponse.class);
+    public ResponseEntity<RoomResponse> updateRoom(@PathVariable int id, @Valid @RequestBody RoomResponse roomResponse) {
+        try {
+            roomResponse.setId(id);
+            Room room = conversionService.convert(roomResponse, Room.class);
+            room = roomService.updateRoom(id, room);
+            RoomResponse updatedRoomResponse = conversionService.convert(room, RoomResponse.class);
+            return ResponseEntity.ok(updatedRoomResponse);
+        } catch (RoomifyException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     /**
@@ -87,8 +97,12 @@ public class RoomController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoom(@PathVariable int id) {
-        roomService.deleteRoom(id);
-        return ResponseEntity.noContent().build();
+        try {
+            roomService.deleteRoom(id);
+            return ResponseEntity.noContent().build();
+        } catch (RoomifyException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     /**
@@ -97,11 +111,16 @@ public class RoomController {
      * @return Lista de salas que coinciden.
      */
     @GetMapping("/search")
-    public List<RoomResponse> searchRoomsByName(@RequestParam String name) {
-        List<Room> rooms = roomService.searchRoomsByName(name);
-        return rooms.stream()
-                .map(room -> conversionService.convert(room, RoomResponse.class))
-                .collect(Collectors.toList());
+    public ResponseEntity<List<RoomResponse>> searchRoomsByName(@RequestParam String name) {
+        try {
+            List<Room> rooms = roomService.searchRoomsByName(name);
+            List<RoomResponse> roomResponses = rooms.stream()
+                    .map(room -> conversionService.convert(room, RoomResponse.class))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(roomResponses);
+        } catch (RoomifyException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     /**
@@ -111,8 +130,12 @@ public class RoomController {
      */
     @PostMapping("/{roomId}/users/{userId}")
     public ResponseEntity<Void> addUserToRoom(@PathVariable int roomId, @PathVariable int userId) {
-        roomService.addUserToRoom(roomId, userId);
-        return ResponseEntity.ok().build();
+        try {
+            roomService.addUserToRoom(roomId, userId);
+            return ResponseEntity.ok().build();
+        } catch (RoomifyException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     /**
@@ -122,8 +145,12 @@ public class RoomController {
      */
     @DeleteMapping("/{roomId}/users/{userId}")
     public ResponseEntity<Void> removeUserFromRoom(@PathVariable int roomId, @PathVariable int userId) {
-        roomService.removeUserFromRoom(roomId, userId);
-        return ResponseEntity.ok().build();
+        try {
+            roomService.removeUserFromRoom(roomId, userId);
+            return ResponseEntity.ok().build();
+        } catch (RoomifyException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     /**

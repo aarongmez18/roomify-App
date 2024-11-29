@@ -1,6 +1,7 @@
 package com.app.roomify.service.util;
 
 
+import com.app.roomify.config.properties.RoomifyProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,7 +19,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtUtil {
 
-    private String secret = "springbooot";
+    private final RoomifyProperties roomifyProperties;
 
     public String extractUsername(String token){
         return extractClaim(token,Claims::getSubject);
@@ -49,11 +50,11 @@ public class JwtUtil {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() * 100 * 60 * 60 * 10 ))
-                .signWith(SignatureAlgorithm.HS256,secret).compact();
+                .signWith(SignatureAlgorithm.HS256,roomifyProperties.getJwt().getSecret()).compact();
     }
 
     public Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(roomifyProperties.getJwt().getSecret()).parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token){

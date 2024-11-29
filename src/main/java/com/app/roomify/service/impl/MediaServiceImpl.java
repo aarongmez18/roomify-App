@@ -1,7 +1,7 @@
 package com.app.roomify.service.impl;
 
-import com.app.roomify.domain.Media;
-import com.app.roomify.provider.exchange.repository.MediaRepository;
+import com.app.roomify.repository.domain.Media;
+import com.app.roomify.repository.MediaRepository;
 import com.app.roomify.service.MediaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

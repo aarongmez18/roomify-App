@@ -1,7 +1,7 @@
 package com.app.roomify.service.impl;
 
-import com.app.roomify.domain.Notification;
-import com.app.roomify.provider.exchange.repository.NotificationRepository;
+import com.app.roomify.repository.domain.Notification;
+import com.app.roomify.repository.NotificationRepository;
 import com.app.roomify.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

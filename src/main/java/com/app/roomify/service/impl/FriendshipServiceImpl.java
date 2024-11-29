@@ -1,7 +1,7 @@
 package com.app.roomify.service.impl;
 
-import com.app.roomify.domain.Friendship;
-import com.app.roomify.provider.exchange.repository.FriendshipRepository;
+import com.app.roomify.repository.domain.Friendship;
+import com.app.roomify.repository.FriendshipRepository;
 import com.app.roomify.service.FriendshipService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
